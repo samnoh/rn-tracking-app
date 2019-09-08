@@ -2,7 +2,7 @@ node_modules
 build
 .env
 .DS_Store
-.expo/*
+.expo
 npm-debug.*
 *.jks
 *.p8
