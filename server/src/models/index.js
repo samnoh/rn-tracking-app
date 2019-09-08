@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
-import './User';
 
 import { MONGO_URI } from '../utils/secret';
+import './User';
+import './Track';
 
 mongoose.connect(`mongodb://${MONGO_URI}:27017`, {
     dbName: 'node-server',

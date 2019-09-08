@@ -1,10 +1,11 @@
 import express from 'express';
 import morgan from 'morgan';
 
-import { PORT } from './utils/secret';
 import './models';
+import { PORT } from './utils/secret';
 
 import authRoutes from './routes/authRoutes';
+import trackRoutes from './routes/trackRoutes';
 import requireAuth from './middlewares/requireAuth';
 
 const app = express();
@@ -17,6 +18,7 @@ app.get('/', requireAuth, (req, res) => {
 });
 
 app.use(authRoutes);
+app.use(trackRoutes);
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
