@@ -16,7 +16,7 @@ npm install --save react-native-elements
 ```jsx
 import { Text } from 'react-native-elements';
 ...
-<Text h3>Example</Text>;
+<Text h3>Example</Text>
 ```
 
 ### AsyncStorage
