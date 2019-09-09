@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 
 import { Context as AuthContext } from '../context/AuthContext';
 import AuthForm from '../components/AuthForm';
@@ -13,10 +14,11 @@ const styles = StyleSheet.create({
 });
 
 const SignupScreen = () => {
-    const { state, signup } = useContext(AuthContext);
+    const { state, signup, clearErrorMessage } = useContext(AuthContext);
 
     return (
         <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
+            <NavigationEvents onWillBlur={clearErrorMessage} />
             <AuthForm
                 headerText="Sign Up for Tracker"
                 errorMessage={state.errorMessage}

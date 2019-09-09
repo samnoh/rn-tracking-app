@@ -4,13 +4,18 @@ import api from '../utils/api';
 import { navigate } from '../utils/navigationRef';
 
 // actions
-const SIGNUP = 'SIGNUP';
+const SIGNIN = 'SIGNIN';
+const SIGNOUT = 'SIGNOUT';
 const SHOW_ERROR = 'SHOW_ERROR';
 
 // action creators
-const signupAction = token => ({
-    type: SIGNUP,
+const signinAction = token => ({
+    type: SIGNIN,
     payload: token
+});
+
+const signoutAction = () => ({
+    type: SIGNOUT
 });
 
 const showErrorAction = message => ({
@@ -19,6 +24,20 @@ const showErrorAction = message => ({
 });
 
 // thunks
+export const clearErrorMessage = dispatch => () => {
+    dispatch(showErrorAction(''));
+};
+
+export const tryLocalSignin = dispatch => async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+        dispatch(signinAction(token));
+        navigate('TrackList');
+    } else {
+        navigate('Signup');
+    }
+};
+
 export const signup = dispatch => async ({ email, password }) => {
     try {
         const res = await api.post('/signup', { email, password });
@@ -26,28 +45,48 @@ export const signup = dispatch => async ({ email, password }) => {
 
         await AsyncStorage.setItem('token', token);
 
-        dispatch(signupAction(token));
+        dispatch(signinAction(token));
         dispatch(showErrorAction(''));
 
         navigate('TrackList');
     } catch (e) {
         dispatch(showErrorAction('Something went wrong with network'));
-        setTimeout(() => {
-            dispatch(showErrorAction(''));
-        }, 3000);
     }
 };
 
-export const signin = dispatch => ({ email, password }) => {};
+export const signin = dispatch => async ({ email, password }) => {
+    try {
+        const res = await api.post('/signin', { email, password });
+        const token = res.data.token;
 
-export const signout = dispatch => () => {};
+        await AsyncStorage.setItem('token', token);
+
+        dispatch(signinAction(token));
+        dispatch(showErrorAction(''));
+
+        navigate('TrackList');
+    } catch (e) {
+        dispatch(showErrorAction('Something went wrong with network'));
+    }
+};
+
+export const signout = dispatch => async () => {
+    try {
+        await AsyncStorage.removeItem('token');
+
+        dispatch(signoutAction());
+        navigate('Signin');
+    } catch (e) {}
+};
 
 const authReducer = (state, action) => {
     switch (action.type) {
-        case SIGNUP:
+        case SIGNIN:
             return { ...state, token: action.payload };
         case SHOW_ERROR:
             return { ...state, errorMessage: action.payload };
+        case SIGNOUT:
+            return { token: null, errorMessage: '' };
         default:
             return state;
     }

@@ -1,9 +1,15 @@
 import createDataContext from './createDataContext';
 
-import authReducer, { signup, signin, signout } from '../ducks/auth';
+import authReducer, {
+    clearErrorMessage,
+    tryLocalSignin,
+    signup,
+    signin,
+    signout
+} from '../ducks/auth';
 
 export const { Provider, Context } = createDataContext(
     authReducer,
-    { signup, signin, signout },
+    { clearErrorMessage, tryLocalSignin, signup, signin, signout },
     { token: null, errorMessage: '' }
 );
