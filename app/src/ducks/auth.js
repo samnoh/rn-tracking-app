@@ -1,46 +1,53 @@
+import { AsyncStorage } from 'react-native';
+
 import api from '../utils/api';
+import { navigate } from '../utils/navigationRef';
 
 // actions
-const ADD_ERROR = 'ADD_ERROR';
-const RESET_ERROR = 'RESET_ERROR';
+const SIGNUP = 'SIGNUP';
+const SHOW_ERROR = 'SHOW_ERROR';
 
 // action creators
-const addError = () => ({
-    type: ADD_ERROR,
-    payload: 'Something went wrong with sign up'
+const signupAction = token => ({
+    type: SIGNUP,
+    payload: token
 });
 
-const resetError = () => ({
-    type: RESET_ERROR
+const showErrorAction = message => ({
+    type: SHOW_ERROR,
+    payload: message
 });
 
 // thunks
 export const signup = dispatch => async ({ email, password }) => {
-    // make api req to sign up with email and password
-    // modify app state
     try {
         const res = await api.post('/signup', { email, password });
-        console.log(res.data);
+        const token = res.data.token;
+
+        await AsyncStorage.setItem('token', token);
+
+        dispatch(signupAction(token));
+        dispatch(showErrorAction(''));
+
+        navigate('TrackList');
     } catch (e) {
-        dispatch(addError());
+        dispatch(showErrorAction('Something went wrong with network'));
         setTimeout(() => {
-            dispatch(resetError());
-        }, 5000);
+            dispatch(showErrorAction(''));
+        }, 3000);
     }
 };
 
-export const signin = dispatch => ({ email, password }) => {
-    // try to signin
-};
+export const signin = dispatch => ({ email, password }) => {};
 
 export const signout = dispatch => () => {};
 
 const authReducer = (state, action) => {
     switch (action.type) {
-        case ADD_ERROR:
+        case SIGNUP:
+            return { ...state, token: action.payload };
+        case SHOW_ERROR:
             return { ...state, errorMessage: action.payload };
-        case RESET_ERROR:
-            return { ...state, errorMessage: '' };
         default:
             return state;
     }
