@@ -3,11 +3,12 @@ import locationReducer, {
     changeName,
     startRecording,
     stopRecording,
-    addLocation
+    addLocation,
+    resetLocation
 } from '../ducks/location';
 
 export const { Context, Provider } = createDateContext(
     locationReducer,
-    { changeName, startRecording, stopRecording, addLocation },
+    { changeName, startRecording, stopRecording, addLocation, resetLocation },
     { name: '', recording: false, locations: [], currentLocation: null }
 );

@@ -8,7 +8,7 @@ import { Context as LocationContext } from '../context/LocationContext';
 import useLocation from '../hooks/useLocation';
 import VerticalSpacer from '../components/VerticalSpacer';
 import TrackForm from '../components/TrackForm';
-import '../utils/_mockLocation';
+// import '../utils/_mockLocation';
 
 const styles = StyleSheet.create({
     title: {
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
 const TrackCreateScreen = ({ isFocused }) => {
     const {
-        state: { recording, locations },
+        state: { recording },
         addLocation
     } = useContext(LocationContext);
     const callback = useCallback(

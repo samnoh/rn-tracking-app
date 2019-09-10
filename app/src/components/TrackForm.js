@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+
 import VerticalSpacer from '../components/VerticalSpacer';
 import { Context as LocationContext } from '../context/LocationContext';
+import useSaveTrack from '../hooks/useSaveTrack';
 
 const styles = StyleSheet.create({
     container: {
@@ -13,12 +15,14 @@ const styles = StyleSheet.create({
     },
     button: {
         marginHorizontal: 10
-    }
+    },
+    saveButton: {}
 });
 
 const TrackForm = () => {
     const { state, startRecording, stopRecording, changeName } = useContext(LocationContext);
-    const { name, recording } = state;
+    const { name, recording, locations } = state;
+    const [saveTrack] = useSaveTrack();
 
     return (
         <View style={styles.container}>
@@ -44,6 +48,15 @@ const TrackForm = () => {
                     onPress={startRecording}
                 />
             )}
+            <VerticalSpacer sm />
+            {!recording && locations.length ? (
+                <Button
+                    title="Save Recording"
+                    type="clear"
+                    style={styles.button}
+                    onPress={saveTrack}
+                />
+            ) : null}
         </View>
     );
 };

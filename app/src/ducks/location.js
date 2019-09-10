@@ -4,6 +4,7 @@ const START_RECORDING = 'START_RECORDING';
 const STOP_RECORDING = 'STOP_RECORDING';
 const ADD_CURRENT_LOCATION = 'ADD_CURRENT_LOCATION';
 const ADD_LOCATION = 'ADD_LOCATION';
+const RESET_LOCATION = 'RESET_LOCATION';
 
 // action creators
 const changeNameAction = name => ({
@@ -29,6 +30,10 @@ const addLocationAction = location => ({
     payload: location
 });
 
+const resetLocationAction = () => ({
+    type: RESET_LOCATION
+});
+
 // thunks
 export const changeName = dispatch => name => {
     dispatch(changeNameAction(name));
@@ -49,6 +54,10 @@ export const addLocation = dispatch => (location, recording) => {
     }
 };
 
+export const resetLocation = dispatch => () => {
+    dispatch(resetLocationAction());
+};
+
 // reducer
 const locationReducer = (state, action) => {
     switch (action.type) {
@@ -62,6 +71,8 @@ const locationReducer = (state, action) => {
             return { ...state, currentLocation: action.payload };
         case ADD_LOCATION:
             return { ...state, locations: [...state.locations, action.payload] };
+        case RESET_LOCATION:
+            return { ...state, name: '', locations: [] };
         default:
             return state;
     }

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 
 const Map = () => {
     const {
-        state: { currentLocation }
+        state: { currentLocation, locations }
     } = useContext(LocationContext);
 
     if (!currentLocation) return <ActivityIndicator size="large" style={{ marginTop: 200 }} />;
@@ -31,7 +31,13 @@ const Map = () => {
                 longitudeDelta: 0.01
             }}
         >
-            <Circle center={currentLocation.coords} radius={30} strokeColor="rgba(158, 158, 255, 1.0)" fillColor="rgba(158, 158, 255, 0.3)" />
+            <Circle
+                center={currentLocation.coords}
+                radius={30}
+                strokeColor="rgba(158, 158, 255, 1.0)"
+                fillColor="rgba(158, 158, 255, 0.3)"
+            />
+            <Polyline coordinates={locations.map(location => location.coords)} />
         </MapView>
     );
 };
