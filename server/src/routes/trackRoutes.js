@@ -9,7 +9,7 @@ const router = Router();
 router.use(requireAuth);
 
 router.get('/tracks', async (req, res) => {
-    const tracks = await Track.find({ userId: req.user._id }); // :[]
+    const tracks = await Track.find({ userId: req.user._id }); // typeof tracks = []
 
     res.send(tracks);
 });
@@ -25,6 +25,18 @@ router.post('/tracks', async (req, res) => {
         await track.save();
 
         res.send(track);
+    } catch (e) {
+        res.status(422).send({ error: e.message });
+    }
+});
+
+router.delete('/tracks/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await Track.findByIdAndDelete(id);
+
+        res.send({ success: id });
     } catch (e) {
         res.status(422).send({ error: e.message });
     }
