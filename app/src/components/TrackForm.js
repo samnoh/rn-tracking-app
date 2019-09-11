@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Keyboard, View, StyleSheet } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 
 import VerticalSpacer from '../components/VerticalSpacer';
@@ -8,7 +8,9 @@ import useSaveTrack from '../hooks/useSaveTrack';
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 20
+        flex: 1,
+        marginHorizontal: 20,
+        backgroundColor: 'white'
     },
     input: {
         borderBottomColor: '#50A75C'
@@ -20,14 +22,16 @@ const styles = StyleSheet.create({
 });
 
 const TrackForm = () => {
-    const { state, startRecording, stopRecording, changeName } = useContext(LocationContext);
+    const { state, startRecording, stopRecording, changeName, resetLocation } = useContext(
+        LocationContext
+    );
     const { name, recording, locations } = state;
     const [saveTrack] = useSaveTrack();
 
     return (
         <View style={styles.container}>
             <Input
-                placeholder="Enter Name"
+                placeholder="Enter Description"
                 inputContainerStyle={styles.input}
                 value={name}
                 onChangeText={changeName}
@@ -38,24 +42,46 @@ const TrackForm = () => {
                     title="Stop"
                     style={styles.button}
                     buttonStyle={{ backgroundColor: '#C9444A' }}
-                    onPress={stopRecording}
+                    onPress={() => {
+                        stopRecording();
+                        Keyboard.dismiss();
+                    }}
                 />
             ) : (
                 <Button
                     title="Start Recording"
                     style={styles.button}
                     buttonStyle={{ backgroundColor: '#50A75C' }}
-                    onPress={startRecording}
+                    onPress={() => {
+                        startRecording();
+                        Keyboard.dismiss();
+                    }}
                 />
             )}
             <VerticalSpacer sm />
             {!recording && locations.length ? (
-                <Button
-                    title="Save Recording"
-                    type="clear"
-                    style={styles.button}
-                    onPress={saveTrack}
-                />
+                <>
+                    <Button
+                        title="Save Recording"
+                        type="clear"
+                        style={styles.button}
+                        onPress={() => {
+                            saveTrack();
+                            Keyboard.dismiss();
+                        }}
+                    />
+                    <VerticalSpacer sm />
+                    <Button
+                        title="Cancel"
+                        type="clear"
+                        style={styles.button}
+                        titleStyle={{ color: 'gray' }}
+                        onPress={() => {
+                            resetLocation();
+                            Keyboard.dismiss();
+                        }}
+                    />
+                </>
             ) : null}
         </View>
     );

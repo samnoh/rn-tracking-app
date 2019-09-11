@@ -6,7 +6,8 @@ import { Context as LocationContext } from '../context/LocationContext';
 
 const styles = StyleSheet.create({
     map: {
-        height: 300
+        height: 300,
+        marginBottom: 10
     }
 });
 

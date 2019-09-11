@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { ListItem, Text } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
+import Swipeout from 'react-native-swipeout';
 
 import VerticalSpacer from '../components/VerticalSpacer';
 import { Context as TrackContext } from '../context/TrackContext';
@@ -27,6 +28,16 @@ const styles = StyleSheet.create({
 const TrackListScreen = ({ navigation }) => {
     const { state, getTracks } = useContext(TrackContext);
 
+    const swipeoutBtns = [
+        {
+            text: 'Delete',
+            backgroundColor: '#FD4844',
+            underlayColor: 'red',
+            type: 'delete',
+            onPress: () => console.log('delete')
+        }
+    ];
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
@@ -41,9 +52,30 @@ const TrackListScreen = ({ navigation }) => {
                         data={state}
                         keyExtractor={item => item._id}
                         renderItem={({ item }) => (
-                            <TouchableOpacity>
-                                <ListItem chevron={true} title={item.name} />
-                            </TouchableOpacity>
+                            <Swipeout
+                                right={swipeoutBtns}
+                                sensitivity={90}
+                                backgroundColor="transparent"
+                            >
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        navigation.navigate('TrackDetail', {
+                                            _id: item._id,
+                                            name: item.name
+                                        })
+                                    }
+                                >
+                                    <ListItem
+                                        chevron={true}
+                                        title={item.name}
+                                        subtitle={new Date(item.locations[0].timestamp)
+                                            .toISOString()
+                                            .substring(0, 10)}
+                                        subtitleStyle={{ color: 'gray', top: 3 }}
+                                        bottomDivider
+                                    />
+                                </TouchableOpacity>
+                            </Swipeout>
                         )}
                     />
                 </View>
@@ -53,7 +85,8 @@ const TrackListScreen = ({ navigation }) => {
 };
 
 TrackListScreen.navigationOptions = {
-    header: null
+    header: null,
+    headerBackTitle: 'Tracks'
 };
 
 export default TrackListScreen;
