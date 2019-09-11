@@ -1,11 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import {
     ScrollView,
     View,
     SafeAreaView,
     FlatList,
-    Button,
-    TouchableOpacity,
     StyleSheet,
     TouchableHighlight
 } from 'react-native';
@@ -27,16 +25,7 @@ const styles = StyleSheet.create({
 });
 
 const TrackListScreen = ({ navigation }) => {
-    const { state, getTracks } = useContext(TrackContext);
-
-    const swipeBtns = [
-        {
-            text: 'Delete',
-            backgroundColor: '#FD4844',
-            underlayColor: 'red',
-            onPress: () => console.log('delete')
-        }
-    ];
+    const { state, getTracks, deleteTrack } = useContext(TrackContext);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -55,10 +44,16 @@ const TrackListScreen = ({ navigation }) => {
                             renderItem={({ item, index }) => (
                                 <Swipeout
                                     rowId={item._id}
-                                    right={swipeBtns}
+                                    right={[
+                                        {
+                                            text: 'Delete',
+                                            backgroundColor: '#FD4844',
+                                            underlayColor: 'red',
+                                            onPress: () => deleteTrack(item._id)
+                                        }
+                                    ]}
                                     autoClose={true}
                                     backgroundColor="transparent"
-                                    onOpen={(sectionID, rowID) => {}}
                                     close={true}
                                 >
                                     <TouchableHighlight
