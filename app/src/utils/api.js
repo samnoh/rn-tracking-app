@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 // Tracker
 const instance = axios.create({
-    baseURL: 'http://18ad716f.ngrok.io'
+    baseURL: 'http://2ffb74bf.ngrok.io'
 });
 
 instance.interceptors.request.use(

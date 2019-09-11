@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
         top: -50
     },
     bottom: {
-        width: '80%',
+        width: '85%',
         alignSelf: 'center',
         position: 'absolute',
-        bottom: 20,
+        bottom: 40,
         marginHorizontal: 30
     }
 });
