@@ -30,3 +30,22 @@ AsyncStorage.setItem('name', data.name);
 AsyncStorage.getItem('name');
 AsyncStorage.removeItem('name');
 ```
+
+### Axios
+
+-   `interceptors.request.use((config) => {}, (err) => {})` is executed every time you request
+
+```javascript
+const instance = axios.create({
+    baseURL: 'http://www.example.com'
+});
+
+instance.interceptors.request.use(
+    async config => {
+        if (token) config.headers.Authorization = `Bearer $helloworld$`;
+
+        return config;
+    },
+    e => Promise.reject(e)
+);
+```
