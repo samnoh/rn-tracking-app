@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
     ScrollView,
     View,
@@ -10,6 +10,8 @@ import {
 import { ListItem, Text } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import Swipeout from 'react-native-swipeout';
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 import VerticalSpacer from '../components/VerticalSpacer';
 import { Context as TrackContext } from '../context/TrackContext';
@@ -26,6 +28,27 @@ const styles = StyleSheet.create({
 
 const TrackListScreen = ({ navigation }) => {
     const { state, getTracks, deleteTrack } = useContext(TrackContext);
+
+    useEffect(() => {
+        const register = async () => {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            if (status !== 'granted') return;
+            const token = await Notifications.getExpoPushTokenAsync();
+
+            console.log(token);
+        };
+
+        const listen = ({ origin, data }) => {
+            console.log(origin, data);
+        };
+
+        register();
+        const listener = Notifications.addListener(listen);
+
+        return () => {
+            if (listener) Notifications.removeListener(listen);
+        };
+    }, []);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

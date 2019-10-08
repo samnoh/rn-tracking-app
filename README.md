@@ -33,7 +33,7 @@ AsyncStorage.removeItem('name');
 
 ### Axios
 
--   `interceptors.request.use((config) => {}, (err) => {})` is executed every time you request
+-   `interceptors.request.use((config) => {}, (err) => {})` is executed every time you request like middleware
 
 ```javascript
 const instance = axios.create({

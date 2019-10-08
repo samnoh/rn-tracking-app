@@ -58,7 +58,7 @@ const TrackCreateScreen = ({ isFocused }) => {
                     height: Dimensions.get('window').height - 550
                 }}
             >
-                <View style={styles.bottom} scrollEnabled={false}>
+                <View style={styles.bottom}>
                     {error ? <Text>Please enable location services</Text> : null}
                     <TrackForm />
                 </View>
